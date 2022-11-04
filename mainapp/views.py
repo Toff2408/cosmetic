@@ -1,5 +1,6 @@
 import requests
 import json
+import uuid
 
 
 from django.shortcuts import render, HttpResponse,redirect
@@ -308,6 +309,7 @@ def pay(request):
         daddy = request.POST['daddy']
         baddy = request.POST['baddy']
         city = request.POST['city']
+        state = request.POST['state']
 
 
 
@@ -340,7 +342,7 @@ def pay(request):
             delivery.delivery_address = daddy
             delivery.billing_address = baddy
             delivery.city = city
-            delivery.state =  State
+            delivery.state = state
             delivery.save()
             return redirect(rurl)
         return redirect('checkout')
