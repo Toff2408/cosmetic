@@ -1,19 +1,19 @@
-import requests
-import json
-import uuid
+import requests   #This was for API
+import json   # In other to send data from app to paystack
+import uuid   # USed to generate unique random number
 
 
-from django.shortcuts import render, HttpResponse,redirect
-from django.contrib.auth import logout, authenticate, login
+from django.shortcuts import render, HttpResponse,redirect #redirect was imported for ridirection purposes
+from django.contrib.auth import logout, authenticate, login #The help of importing Authenticate leads to authenticating the likes of (singin,signout,signup)
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.contrib import messages #to send out messages to the Client view
 
 
 from mainapp.models import Category, Product
 from account.models import Profile
 from cart.models import Shopcart,Payment,Shipping
-from account.forms import PasswordForm, SignupForm, ProfileForm
+from account.forms import PasswordForm, SignupForm, ProfileForm #for signup, Password reset, And updating profile
 
 # Create your views here.
 
@@ -26,7 +26,7 @@ def index(request):
     return render(request,'index.html', context)
 
 def product(request):
-    product = Product.objects.all()
+    product = Product.objects.all() # Query the Db to dish out data to the clients page
 
     context  = {
         'products':product
@@ -80,14 +80,13 @@ def signin(request):
             messages.warning(request,'Username/password incorrect')
             return redirect('signin')
     return render(request, 'signin.html')
-    #authentication system done
-
+   
 
 def signup(request):
-    regform = SignupForm()#making a GET request
+    regform = SignupForm()  #making a GET request
     if request.method == 'POST':
         phone = request.POST['phone']
-        regform = SignupForm(request.POST)#making a post request
+        regform = SignupForm(request.POST)  #making a post request
         if regform.is_valid():
             newuser = regform.save()
             newprofile = Profile(user = newuser)
@@ -102,6 +101,8 @@ def signup(request):
         else:
             messages.error(request, regform.errors)
     return render(request, 'signup.html')
+    
+    
     #authentication system done
 
 
@@ -295,7 +296,7 @@ def pay(request):
     if request.method == 'POST':
         api_key = 'sk_test_f0965b28dca2c63d4a242d8bc1b9dabbe0a50eea'
         curl = 'https://api.paystack.co/transaction/initialize'
-        cburl = 'http://34.241.53.237/callback'
+        cburl = 'http://54.75.182.226/callback'
         # cburl = 'http://localhost:8000/callback'
         ref = str(uuid.uuid4())
         amount = float(request.POST['total']) * 100

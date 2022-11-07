@@ -30,11 +30,17 @@ class Product(models.Model):
     def __str__(self):
         return self.p_name
 
+        #to make it human readbale
+
     class Meta:
         db_table = 'product'
         managed = True
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
+
+        #to give it a plural name
+
+
 
 
 
