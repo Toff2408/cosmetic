@@ -58,6 +58,19 @@
             </ul>
           </li>
           <!--  -->
+
+          <li class="nav-item me-3">
+            <div class="nav-link">
+              <span class="badge rounded-pill bg-primary">
+                {% if cart_counter > 0 %}
+                <span class="badge rounded-pill bg-success text-white"><a href="{% url 'cart' %}">{{cart_counter}}</a></span>
+              {% else %}
+              <span class="badge rounded-pill bg-danger text-white">0</span>
+              {% endif %}
+                </span>
+            </div>
+          </li>
+
           <li class="nav-item me-3">
               <div class="modemoon">
                 <i class="fa-solid fa-moon"></i>

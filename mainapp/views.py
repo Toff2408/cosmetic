@@ -10,6 +10,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages #to send out messages to the Client view
 
 
+# email message setting
+from django.core.mail import EmailMessage
+from django.conf import settings
+# email message setting done
+
+
 from mainapp.models import Category, Product
 from account.models import Profile
 from cart.models import Shopcart,Payment,Shipping
@@ -270,7 +276,7 @@ def decrease(request):
 
 @login_required(login_url='signin')
 def checkout(request):
-    cartitems = Shopcart.objects.filter(user__username = request.user.username)
+    cartitems = Shopcart.objects.filter(user__username = request.user.username,paid=False)
     profile = Profile.objects.get(user__username = request.user.username)
     subtotal = 0
     for a in cartitems:
@@ -296,8 +302,8 @@ def pay(request):
     if request.method == 'POST':
         api_key = 'sk_test_f0965b28dca2c63d4a242d8bc1b9dabbe0a50eea'
         curl = 'https://api.paystack.co/transaction/initialize'
-        cburl = 'http://54.75.182.226/callback'
-        # cburl = 'http://localhost:8000/callback'
+        # cburl = 'http://54.75.182.226/callback'
+        cburl = 'http://localhost:8000/callback'
         ref = str(uuid.uuid4())
         amount = float(request.POST['total']) * 100
         cartno = request.POST['cartno']
@@ -305,7 +311,7 @@ def pay(request):
         user = request.user
         fname = request.POST['fname']
         lname = request.POST['lname']
-        email = request.POST['email']
+        order_email = request.POST['email']
         phone = request.POST['phone']
         daddy = request.POST['daddy']
         baddy = request.POST['baddy']
@@ -338,13 +344,24 @@ def pay(request):
             delivery.user = user
             delivery.first_name = fname
             delivery.last_name = lname
-            delivery.email = email
+            delivery.email =  order_email
             delivery.phone = phone
             delivery.delivery_address = daddy
             delivery.billing_address = baddy
             delivery.city = city
             delivery.state = state
             delivery.save()
+
+            email = EmailMessage(
+                'Transaction completed!',  #title
+                f'Dear {user.first_name}, your transactio is completed. \n your order will be delivered in 24hours. \n Thank you for your patronage.', #message body goes here
+                settings.EMAIL_HOST_USER,  #sender email
+                [email]  #receiver's email
+            )
+
+            email.fail_silently = True
+            email.send()
+
             return redirect(rurl)
         return redirect('checkout')
 

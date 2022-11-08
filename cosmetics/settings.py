@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-qs$bk+0p7^m0bkar9&v3akuq6i_-xyr0m7ji_42ea=%yatc7mp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Dont show any error in the browser
+DEBUG = True  # Dont show any error in the browser
 
-ALLOWED_HOSTS = ['54.75.182.226']
+# ALLOWED_HOSTS = ['54.75.182.226']
 
 
 # Application definition
@@ -66,7 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'mainapp.context_processor.catedropdown'
+                'mainapp.context_processor.catedropdown',
+                'mainapp.context_processor.itemcount'
             ],
         },
     },
@@ -127,6 +128,14 @@ STATCTICFILES_DIRS =[BASE_DIR/ 'mainapp/static']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/ 'media'
 
+
+# email settimgs 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'toffclues@gmail.com'
+EMAIL_HOST_PASSWORD = 'ljlhyfhhllltscga'
+EMAIL_USE_TLS = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
